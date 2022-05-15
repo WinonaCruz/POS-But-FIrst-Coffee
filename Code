@@ -1,0 +1,169 @@
+#include <stdio.h>
+#include <unistd.h>
+
+int hotCounter[3], icedCounter[9], cookiesCounter[3];
+float hotPrices[] = {45, 55, 65}, icedPrices[] = {50, 60, 80, 90, 100, 120, 180, 200, 220}, cookiePrices[] = {30, 100 ,150}, total = 0, change, cash;
+char hotNames[3][30] = {"12oz Brewed", "12oz Vietnamese Style", "Cup-Classic"};
+char icedNames[9][30] = {"16oz Cup-Plain Black", "16oz Cup-Vietnamese Style", "16oz Cup-Classic", "500ml Jar-Plain Black", "500ml Jar-Vietnamese Style", "500ml Jar-Classic", "1L Bottle-Plain Black", "1L Bottle-Vietnamese Style", "1L Bottle-Classic"};
+char cookieNames[3][30] = {"1pc Chocolate Chip Walnut", "4pcs Chocolate Chip Walnut", "8pcs Chocolate Chip Walnut"};
+
+void printReceipt(){
+    system("clear");
+    printf("\n=================================\n");
+	printf("\tRECEIPT\n");
+	printf("=================================\n");
+
+	for(int i = 0; i < 3; i++){
+        if(hotCounter[i] != 0){
+            printf("%s\tx%i:\t%.2f\n", hotNames[i], hotCounter[i], hotPrices[i] * hotCounter[i]);
+        }
+	}
+
+	for(int i = 0; i < 9; i++){
+        if(icedCounter[i] != 0){
+            printf("%s\tx%i:\t%.2f\n", icedNames[i], icedCounter[i], icedPrices[i] * icedCounter[i]);
+        }
+	}
+
+	for(int i = 0; i < 3; i++){
+        if(cookiesCounter[i] != 0){
+            printf("%s\tx%i:\t%.2f\n", cookieNames[i], cookiesCounter[i], cookiePrices[i] * cookiesCounter[i]);
+        }
+	}
+
+	printf("=================================\n");
+	printf("Total: %.2f\n", total);
+	printf("Cash: %.2f\n", cash);
+	printf("Change: %.2f\n", change);
+	printf("=================================\n");
+	printf("\n\nThanks for buying!\n\n\n");
+
+}
+
+void payment(){
+    char YN;
+
+    system("clear");
+    for(int i = 0; i < 3; i++){
+        if(hotCounter[i] != 0){
+            total += (hotPrices[i] * hotCounter[i]);
+        }
+        if(cookiesCounter[i] != 0){
+            total += (cookiePrices[i] * cookiesCounter[i]);
+        }
+    }
+    for (int i = 0; i < 9; i++){
+        if(icedCounter[i] != 0){
+            total += (icedPrices[i] * icedCounter[i]);
+        }
+    }
+
+
+    printf("\n=================================\n");
+	printf("\tPayment\n");
+	printf("=================================\n");
+	printf("Total: %f", total);
+    printf("\n=================================\n");
+    while(1==1){
+        printf("Enter cash amount: "); scanf(" %f", &cash);
+        change = cash - total;
+        if(change > -1){
+            printf("\n=================================\n");
+            printf("Change: %f", change);
+            printf("\n=================================\n");
+
+            printf("\n\nShall we proceed to print the receipt? Y/N: "); scanf(" %c", &YN);
+
+            if(YN == 'y' || YN == 'Y'){
+                break;
+            } else{
+                exit(0);
+            }
+        } else{
+            printf("\nYour cash is not enough! Try Again!\n");
+        }
+    }
+}
+
+void takeOrder(){
+    int choice, amount;
+	char YN;
+
+    printf("\nHello! Welcome to BFC! \nLet's start your order with our iced coffee ^_^\n\n");
+	printf("Would you like to order an Iced Coffee? Y/N: "); scanf(" %c", &YN);
+
+    if(YN == 'y' || YN == 'Y'){
+        while(1==1){
+            printf("Which variation would you like? (1..9): "); scanf("%i", &choice);
+            printf("How many would you like? "); scanf("%i", &amount);
+
+            icedCounter[choice-1] = amount;
+
+            printf("\nOrder Success! Would you like another iced coffee?");scanf(" %c", &YN);
+            if(YN == 'n' || YN == 'N'){
+                break;
+            }
+        }
+	}
+
+	printf("\nWould you like to order a Hot Coffee? Y/N: "); scanf("%c", &YN);
+
+	if(YN == 'y' || YN == 'Y'){
+        while(1==1){
+            printf("Which variation would you like? (1..3): "); scanf("%i", &choice);
+            printf("How many would you like? "); scanf("%i", &amount);
+
+            hotCounter[choice-1] = amount;
+
+            printf("\nOrder Success! Would you like another hot coffee? Y/N: "); scanf(" %c", &YN);
+            if(YN == 'n' || YN == 'N'){
+                break;
+            }
+        }
+	}
+
+    printf("\nWould you like to order a Cookie? Y/N: "); scanf(" %c", &YN);
+    if(YN == 'y' || YN == 'Y'){
+        while(1==1){
+            printf("Which variation would you like? (1..3): "); scanf("%i", &choice);
+            printf("How many would you like? "); scanf("%i", &amount);
+
+            cookiesCounter[choice-1] = amount;
+
+            printf("\nOrder Success! Would you like another cookie?"); scanf(" %c", &YN);
+            if(YN == 'n' || YN == 'N'){
+                break;
+            }
+        }
+	}
+
+
+	printf("\n\nAll orders done! Proceeding to payment...");
+}
+
+void menu(){
+	printf("=================================\n");
+	printf("\tWelcome to BFC!\n");
+	printf("=================================\n");
+
+	printf("\n===========ICED COFEE============\t===========HOT COFFEE============\n");
+	printf("1) 16oz Cup-Plain Black\t\t50\t1) 12oz Brewed \t\t\t45\n");
+	printf("2) 16oz Cup-Vietnamese Style\t60\t2) 12oz Vietnamese Style\t55\n");
+	printf("3) 16oz Cup-Classic \t\t80\t3) 12oz Classic \t\t65\n");
+	printf("4) 500ml Jar-Plain Black\t90\t=================================\n");
+	printf("5) 500ml Jar-Vietnamese Style\t100\n");
+	printf("6) 500ml Jar-Classic \t\t120\t============COOKIES==============\n");
+	printf("7) 1L Bottle-Plain Black\t180\t1) 1pc Chocolate Chip Walnut \t45\n");
+	printf("8) 1L Bottle-Vietnamese Style\t200\t2) 4pcs Chocolate Chip Walnut\t55\n");
+	printf("9) 1L Bottle-Classic \t\t220\t3) 8pcs Chocolate Chip Walnut \t65\n");
+	printf("=================================\t=================================\n");
+
+}
+
+int main(){
+	menu();
+	takeOrder();
+	payment();
+	printReceipt();
+  
+}
